@@ -1,0 +1,119 @@
+{
+  "name": "bluecat",
+  "description": "Open-source alternative to Higgsfield AI \u2014 AI image, video, cinema and lip sync studio",
+  "private": true,
+  "version": "1.0.4",
+  "workspaces": [
+    "packages/studio",
+    "packages/Vibe-Workflow/packages/workflow-builder",
+    "packages/Open-Poe-AI/packages/agents"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:studio": "cd packages/studio && npm run build",
+    "setup": "npm install --legacy-peer-deps && npm run build:deps && npm run build:studio",
+    "vite:dev": "vite",
+    "vite:build": "vite build",
+    "electron:dev": "npm run vite:build && electron .",
+    "electron:build": "vite build && electron-builder --mac",
+    "electron:build:win": "vite build && electron-builder --win",
+    "electron:build:linux": "vite build && electron-builder --linux",
+    "electron:build:all": "vite build && electron-builder --mac --win --linux",
+    "build:deps": "cd packages/Vibe-Workflow/packages/workflow-builder && npm install --legacy-peer-deps && npm run build && cd ../../../../packages/Open-Poe-AI/packages/agents && npm install --legacy-peer-deps && npm run build && cd ../../../../",
+    "netlify:build": "npm run setup && next build"
+  },
+  "build": {
+    "appId": "ai.generative.open",
+    "productName": "Bluecat",
+    "copyright": "Copyright \u00a9 2025",
+    "directories": {
+      "output": "release"
+    },
+    "afterPack": "./afterPack.js",
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "icon": "public/banner.png",
+      "gatekeeperAssess": false,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "icon": "public/banner.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh"
+    },
+    "linux": {
+      "icon": "public/banner.png",
+      "category": "Utility",
+      "maintainer": "Bluecat Team",
+      "extraFiles": [
+        {
+          "from": "build/linux/apparmor.profile",
+          "to": "resources/apparmor.profile"
+        }
+      ],
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.4.1",
+    "studio": "*",
+    "workflow-builder": "file:./packages/Vibe-Workflow/packages/workflow-builder",
+    "ai-agent": "file:./packages/Open-Poe-AI/packages/agents"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/vite": "^4.1.18",
+    "autoprefixer": "^10.4.24",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "eslint": "^9",
+    "eslint-config-next": "^15.0.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.2",
+    "vite": "^5.4.0"
+  },
+  "main": "electron/main.js"
+}
