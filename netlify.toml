@@ -1,19 +1,8 @@
-# Netlify deployment configuration for Bluecat
-# This project is a Next.js 15 app with npm workspaces.
-# The build command installs all dependencies, compiles the three
-# sub-packages (studio, workflow-builder, ai-agent), then runs next build.
-
 [build]
   command = "npm run setup && npm run build"
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION    = "20"
-  NPM_FLAGS       = "--legacy-peer-deps"
-  # Disable Next.js telemetry during CI / Netlify builds
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
   NEXT_TELEMETRY_DISABLED = "1"
-
-# Required Netlify plugin that enables Next.js SSR, API routes and
-# middleware to work as Netlify Functions / Edge Functions.
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
